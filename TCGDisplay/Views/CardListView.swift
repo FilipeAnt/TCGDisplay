@@ -20,7 +20,7 @@ struct CardListView: View {
             .searchable(text: $viewModel.searchText, prompt: "Search Pokémon")
             .navigationTitle("Pokémon Cards")
             .onAppear {
-                viewModel.fetchCards()
+                Task { await viewModel.fetchCards() }
             }
         }
     }

@@ -24,12 +24,14 @@ final class CardListViewModel: ObservableObject {
         }
     }
     
-    // Placeholder fetch function (replace with async/await later)
-    func fetchCards() {
-        // Temporary placeholder: no API call yet
-        self.cards = [
-            PokemonCard(id: "1", name: "Pikachu", image: nil),
-            PokemonCard(id: "2", name: "Charizard", image: nil)
-        ]
+    @MainActor
+    func fetchCards() async {
+        do {
+            self.cards = try await TCGDexAPI.shared.fetchCards()
+        } catch {
+            print("Error fetching cards: \(error)")
+            self.cards = []
+        }
     }
+
 }

@@ -10,22 +10,20 @@ import Foundation
 
 final class CardDetailViewModel: ObservableObject {
     @Published var card: PokemonCardDetail?
-    
-    // Placeholder fetch function
-    func fetchCardDetail(id: String) {
-        self.card = PokemonCardDetail(
-            id: id,
-            name: "Pikachu",
-            supertype: "Pokémon",
-            subtypes: ["Basic"],
-            hp: "60",
-            types: ["Electric"],
-            rarity: "Common",
-            images: CardImages(small: nil, large: nil),
-            attacks: nil,
-            weaknesses: nil,
-            resistances: nil,
-            retreatCost: nil
-        )
+    @Published var isLoading: Bool = false
+    @Published var errorMessage: String?
+
+    @MainActor
+    func fetchCardDetail(id: String) async {
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            let fetchedCard = try await TCGDexAPI.shared.fetchCardDetail(id: id)
+            self.card = fetchedCard
+        } catch {
+            self.errorMessage = "Failed to fetch card: \(error.localizedDescription)"
+            print(error)
+        }
     }
 }

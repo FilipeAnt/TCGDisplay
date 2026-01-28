@@ -9,7 +9,7 @@ import Foundation
 
 final class TCGDexAPI {
     static let shared = TCGDexAPI()
-    private let baseURL = "https://api.tcgdex.dev/v1/cards"
+    private let baseURL = "https://api.tcgdex.net/v2/en/cards"
 
     private init() {}
 
