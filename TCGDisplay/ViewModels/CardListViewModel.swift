@@ -8,30 +8,36 @@
 import Foundation
 import Combine
 
+@MainActor
 final class CardListViewModel: ObservableObject {
-    // The list of cards fetched from the API
     @Published var cards: [PokemonCard] = []
-    
-    // Search text
-    @Published var searchText: String = ""
-    
-    // Filtered cards based on search text
-    var filteredCards: [PokemonCard] {
-        if searchText.isEmpty {
-            return cards
-        } else {
-            return cards.filter { $0.name.lowercased().contains(searchText.lowercased()) }
-        }
-    }
-    
-    @MainActor
-    func fetchCards() async {
-        do {
-            self.cards = try await TCGDexAPI.shared.fetchCards()
-        } catch {
-            print("Error fetching cards: \(error)")
-            self.cards = []
+    @Published var searchText: String = "" {
+        didSet {
+            filterCards()
         }
     }
 
+    private var allCards: [PokemonCard] = []
+
+    // Fetch cards from the API
+    func fetchCards() async {
+        do {
+            let fetchedCards = try await TCGDexAPI.shared.fetchCards()
+            self.allCards = fetchedCards
+            filterCards() // Make sure initial list is filtered
+        } catch {
+            print("Failed to fetch cards:", error)
+        }
+    }
+
+    // Filter cards locally based on search text
+    private func filterCards() {
+        if searchText.isEmpty {
+            cards = allCards
+        } else {
+            cards = allCards.filter {
+                $0.name.lowercased().contains(searchText.lowercased())
+            }
+        }
+    }
 }

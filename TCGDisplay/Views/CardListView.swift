@@ -9,19 +9,30 @@ import SwiftUI
 
 struct CardListView: View {
     @StateObject private var viewModel = CardListViewModel()
-    
+
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+
     var body: some View {
-        NavigationStack {
-            List(viewModel.filteredCards) { card in
-                NavigationLink(destination: CardDetailView(cardId: card.id)) {
-                    Text(card.name)
+        NavigationView {
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 16) {
+                    ForEach(viewModel.cards, id: \.id) { card in
+                        NavigationLink(destination: CardDetailView(cardId: card.id)) {
+                            CardRowView(card: card)
+                        }
+                    }
                 }
+                .padding()
             }
-            .searchable(text: $viewModel.searchText, prompt: "Search Pokémon")
             .navigationTitle("Pokémon Cards")
-            .onAppear {
-                Task { await viewModel.fetchCards() }
+            .searchable(text: $viewModel.searchText, prompt: "Search by name")
+            .task {
+                await viewModel.fetchCards()
             }
         }
     }
 }
+
