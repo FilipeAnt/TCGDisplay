@@ -33,7 +33,7 @@ struct CardRowView: View {
                         Image("backImgTest")
                             .resizable()
                             .scaledToFit()
-                            .frame(height: 60)
+                            .frame(height: 200)
                             .foregroundColor(.clear)
                             .onAppear {
                                 attemptRetry()
@@ -47,16 +47,16 @@ struct CardRowView: View {
                 Image("backImgTest")
                     .resizable()
                     .scaledToFit()
-                    .frame(height: 120)
+                    .frame(height: 200)
                     .foregroundColor(.gray)
             }
             Text(card.name)
-                .font(.caption)
+                .font(.headline)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
                 .frame(maxWidth: .infinity)
         }
-        .padding(4)
+        .padding(10)
         .background(Color(.secondarySystemBackground))
         .cornerRadius(10)
         .shadow(radius: 2)

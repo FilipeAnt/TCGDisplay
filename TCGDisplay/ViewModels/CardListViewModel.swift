@@ -19,7 +19,6 @@ final class CardListViewModel: ObservableObject {
 
     private var allCards: [PokemonCard] = []
 
-    // Fetch cards from the API
     func fetchCards() async {
         do {
             let fetchedCards = try await TCGDexAPI.shared.fetchCards()
@@ -29,15 +28,25 @@ final class CardListViewModel: ObservableObject {
             print("Failed to fetch cards:", error)
         }
     }
-
-    // Filter cards locally based on search text
     private func filterCards() {
-        if searchText.isEmpty {
+        let trimmedSearch = searchText
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+
+        if trimmedSearch.isEmpty {
             cards = allCards
-        } else {
-            cards = allCards.filter {
-                $0.name.lowercased().contains(searchText.lowercased())
-            }
+            return
         }
+
+        let prefixMatches = allCards.filter {
+            $0.name.lowercased().hasPrefix(trimmedSearch)
+        }
+
+        let fuzzyMatches = allCards.filter {
+            let nameLower = $0.name.lowercased()
+            return nameLower.contains(trimmedSearch) && !nameLower.hasPrefix(trimmedSearch)
+        }
+
+        cards = prefixMatches + fuzzyMatches
     }
 }

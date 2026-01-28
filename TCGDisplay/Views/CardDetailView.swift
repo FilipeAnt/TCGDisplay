@@ -42,42 +42,55 @@ struct CardDetailView: View {
                         .font(.title)
                         .bold()
                     
-                    if let hp = card.hp {
-                        Text("HP: \(hp)")
-                    }
-                    if let types = card.types {
-                        Text("Type: \(types.joined(separator: ", "))")
-                    }
-                    if let rarity = card.rarity {
-                        Text("Rarity: \(rarity)")
-                    }
-                    if let stage = card.stage {
-                        Text("Stage: \(stage)")
-                    }
-                    if let evolveFrom = card.evolveFrom {
-                        Text("Evolves from: \(evolveFrom)")
+                    InfoBoxView {
+                        if let hp = card.hp {
+                            Text("HP: \(hp)")
+                        }
+
+                        if let types = card.types {
+                            Text("Type: \(types.joined(separator: ", "))")
+                        }
+
+                        if let rarity = card.rarity {
+                            Text("Rarity: \(rarity)")
+                        }
+
+                        if let evolveFrom = card.evolveFrom {
+                            Text("Evolves from: \(evolveFrom)")
+                        }
                     }
                     
                     // Attacks
                     if let attacks = card.attacks, !attacks.isEmpty {
-                        Text("Attacks")
-                            .font(.headline)
-                        ForEach(attacks.indices, id: \.self) { i in
-                            let attack = attacks[i]
-                            VStack(alignment: .leading) {
-                                Text(attack.name ?? "Unknown")
-                                    .bold()
-                                if let cost = attack.cost {
-                                    Text("Cost: \(cost.joined(separator: ", "))")
+                        InfoBoxView(title: "Attacks") {
+                            ForEach(attacks.indices, id: \.self) { i in
+                                let attack = attacks[i]
+
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(attack.name ?? "Unknown")
+                                        .bold()
+
+                                    if let cost = attack.cost {
+                                        Text("Cost: \(cost.joined(separator: ", "))")
+                                            .font(.subheadline)
+                                            .foregroundStyle(.secondary)
+                                    }
+
+                                    if let damage = attack.damage {
+                                        Text("Damage: \(damage)")
+                                    }
+
+                                    if let effect = attack.effect {
+                                        Text(effect)
+                                            .font(.footnote)
+                                            .foregroundStyle(.secondary)
+                                    }
                                 }
-                                if let damage = attack.damage {
-                                    Text("Damage: \(damage)")
-                                }
-                                if let effect = attack.effect {
-                                    Text(effect)
+
+                                if i != attacks.indices.last {
+                                    Divider()
                                 }
                             }
-                            .padding(.bottom, 8)
                         }
                     }
                     Spacer()
@@ -92,7 +105,6 @@ struct CardDetailView: View {
                     .padding()
             }
         }
-        .navigationTitle("Card Detail")
         .onAppear {
             Task { await viewModel.fetchCardDetail(id: cardId) }
         }

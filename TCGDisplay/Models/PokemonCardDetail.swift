@@ -75,8 +75,29 @@ struct CardAttack: Decodable {
     let cost: [String]?
     let name: String?
     let effect: String?
-    let damage: Int? // Some attacks may include damage as number
+    let damage: String?
+
+    enum CodingKeys: String, CodingKey {
+        case cost, name, effect, damage
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        cost = try container.decodeIfPresent([String].self, forKey: .cost)
+        name = try container.decodeIfPresent(String.self, forKey: .name)
+        effect = try container.decodeIfPresent(String.self, forKey: .effect)
+
+        if let damageString = try container.decodeIfPresent(StringOrInt.self, forKey: .damage) {
+            damage = damageString.value
+        } else if let damageInt = try container.decodeIfPresent(Int.self, forKey: .damage) {
+            damage = String(damageInt)
+        } else {
+            damage = nil
+        }
+    }
 }
+
 
 // MARK: - Weaknesses
 struct CardWeakness: Decodable {
@@ -137,4 +158,34 @@ struct TCGPlayerPriceDetail: Decodable {
     let highPrice: Double?
     let marketPrice: Double?
     let directLowPrice: Double?
+}
+
+enum StringOrInt: Decodable {
+    case string(String)
+    case int(Int)
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+
+        if let int = try? container.decode(Int.self) {
+            self = .int(int)
+        } else if let string = try? container.decode(String.self) {
+            self = .string(string)
+        } else {
+            throw DecodingError.typeMismatch(
+                StringOrInt.self,
+                DecodingError.Context(
+                    codingPath: decoder.codingPath,
+                    debugDescription: "Expected String or Int"
+                )
+            )
+        }
+    }
+
+    var value: String {
+        switch self {
+        case .int(let int): return String(int)
+        case .string(let string): return string
+        }
+    }
 }
