@@ -9,33 +9,32 @@ import SwiftUI
 
 struct CardRowView: View {
     let card: PokemonCard
-    @State private var reloadImage = false   // Forces AsyncImage to reload
-    @State private var retryCount = 0        // Limit retries
+    @State private var reloadImage = false
+    @State private var retryCount = 0
 
     private let maxRetries = 3
-    private let retryDelay: TimeInterval = 1.0 // seconds
+    private let retryDelay: TimeInterval = 1.0
 
     var body: some View {
         VStack {
-            if let imageUrl = card.image, let url = URL(string: "\(imageUrl)/high.png") {
+            if let imageUrl = card.image, let url = URL(string: "\(imageUrl)/high.webp") {
                 AsyncImage(url: url, transaction: Transaction(animation: .easeIn)) { phase in
                     switch phase {
                     case .empty:
                         ProgressView()
-                            .frame(height: 120)
+                            .frame(height: 200)
                     case .success(let image):
                         image
                             .resizable()
                             .scaledToFit()
-                            .frame(height: 120)
+                            .frame(height: 200)
                             .cornerRadius(8)
                     case .failure:
-                        // Placeholder while retrying
-                        Image(systemName: "photo")
+                        Image("backImgTest")
                             .resizable()
                             .scaledToFit()
                             .frame(height: 60)
-                            .foregroundColor(.gray)
+                            .foregroundColor(.clear)
                             .onAppear {
                                 attemptRetry()
                             }
@@ -43,17 +42,14 @@ struct CardRowView: View {
                         EmptyView()
                     }
                 }
-                .id(reloadImage) // Forces reload when toggled
+                .id(reloadImage)
             } else {
-                // Fallback if no image URL
-                Image(systemName: "photo")
+                Image("backImgTest")
                     .resizable()
                     .scaledToFit()
                     .frame(height: 120)
                     .foregroundColor(.gray)
             }
-
-            // Card name
             Text(card.name)
                 .font(.caption)
                 .multilineTextAlignment(.center)
@@ -71,7 +67,7 @@ struct CardRowView: View {
         retryCount += 1
 
         DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
-            reloadImage.toggle()  // triggers AsyncImage reload
+            reloadImage.toggle()
         }
     }
 }

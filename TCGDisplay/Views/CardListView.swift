@@ -23,6 +23,7 @@ struct CardListView: View {
                         NavigationLink(destination: CardDetailView(cardId: card.id)) {
                             CardRowView(card: card)
                         }
+                        .buttonStyle(.plain)
                     }
                 }
                 .padding()

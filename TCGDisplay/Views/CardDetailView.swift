@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct CardDetailView: View {
+    
     let cardId: String
     @StateObject private var viewModel = CardDetailViewModel()
-
+    
     var body: some View {
         ScrollView {
             if viewModel.isLoading {
@@ -18,8 +19,7 @@ struct CardDetailView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if let card = viewModel.card {
                 VStack(alignment: .leading, spacing: 16) {
-                    // Card image
-                    if let imageUrl = card.image, let url = URL(string: "\(imageUrl)/high.png") {
+                    if let imageUrl = card.image, let url = URL(string: "\(imageUrl)/high.webp") {
                         AsyncImage(url: url) { phase in
                             switch phase {
                             case .empty:
@@ -37,12 +37,11 @@ struct CardDetailView: View {
                             }
                         }
                     }
-
-                    // Basic info
+                    
                     Text(card.name)
                         .font(.title)
                         .bold()
-
+                    
                     if let hp = card.hp {
                         Text("HP: \(hp)")
                     }
@@ -58,7 +57,7 @@ struct CardDetailView: View {
                     if let evolveFrom = card.evolveFrom {
                         Text("Evolves from: \(evolveFrom)")
                     }
-
+                    
                     // Attacks
                     if let attacks = card.attacks, !attacks.isEmpty {
                         Text("Attacks")
@@ -81,7 +80,6 @@ struct CardDetailView: View {
                             .padding(.bottom, 8)
                         }
                     }
-
                     Spacer()
                 }
                 .padding()
