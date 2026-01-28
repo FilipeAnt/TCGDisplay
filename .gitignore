@@ -1,13 +1,45 @@
 # Xcode
+build/
 DerivedData/
-.build/
-*.xcuserstate
-*.xccheckout
-*.xcuserdata/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
+*.xcscmblueprint
 
 # Swift Package Manager
-.swiftpm/
+/.build/
+Packages/
+Package.resolved
 
-# macOS
+# Xcode Project files
+*.xcodeproj/project.xcworkspace
+*.xcworkspace/xcuserdata/
+
+# SwiftUI previews
+.swiftpm/xcode
+
+# User-specific files
+*.moved-aside
+*.swp
+*~.nib
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Temporary files
+*.tmp
+*.temp
+*.orig
+*.log
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Mac files
 .DS_Store
 
