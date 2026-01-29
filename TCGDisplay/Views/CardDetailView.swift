@@ -47,10 +47,35 @@ struct CardDetailView: View {
                                 }
                             }
                             
-                            Text(card.name)
-                                .font(.title)
-                                .bold()
-                            
+                            HStack(spacing: 4) {
+
+                                // Name
+                                Text(card.name)
+                                    .font(.headline)
+                                    .multilineTextAlignment(.center)
+                                    .lineLimit(2)
+                                    .frame(maxWidth: .infinity)
+
+                                // HP + Types row
+                                HStack(spacing: 6) {
+                                    if let hp = card.hp {
+                                        Text("HP \(hp)")
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                    }
+
+                                    if let types = card.types {
+                                        ForEach(types, id: \.self) { type in
+                                            Image(PokemonTypeIcon.assetName(for: type))
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 20, height: 20)
+                                        }
+                                    }
+                                }
+                            }
+                            .frame(minHeight: 40)
+
                             InfoBoxView(width: geo.size.width - 20) {
                                 
                                 if let hp = card.hp {

@@ -23,30 +23,37 @@ final class CardListViewModel: ObservableObject {
         do {
             let fetchedCards = try await TCGDexAPI.shared.fetchCards()
             self.allCards = fetchedCards
-            filterCards() // Make sure initial list is filtered
+            filterCards()
         } catch {
             print("Failed to fetch cards:", error)
         }
     }
+    
     private func filterCards() {
         let trimmedSearch = searchText
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .lowercased()
 
+        let cardsWithImages = allCards.filter {
+            guard let image = $0.image else { return false }
+            return !image.isEmpty
+        }
+
         if trimmedSearch.isEmpty {
-            cards = allCards
+            cards = cardsWithImages
             return
         }
 
-        let prefixMatches = allCards.filter {
+        let prefixMatches = cardsWithImages.filter {
             $0.name.lowercased().hasPrefix(trimmedSearch)
         }
 
-        let fuzzyMatches = allCards.filter {
+        let fuzzyMatches = cardsWithImages.filter {
             let nameLower = $0.name.lowercased()
             return nameLower.contains(trimmedSearch) && !nameLower.hasPrefix(trimmedSearch)
         }
 
         cards = prefixMatches + fuzzyMatches
     }
+
 }

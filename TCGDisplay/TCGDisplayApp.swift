@@ -20,13 +20,14 @@ struct TCGDisplayApp: App {
                   }
 
                   NavigationStack {
-                      //FavoritesView() // can be simple for now
+                      //FavoritesView()
                   }
                   .tabItem {
                       Label("Favorites", systemImage: "heart")
                   }
                   .tabViewStyle(.sidebarAdaptable)
               }
+              .preferredColorScheme(.dark)
           }
       }
 }
