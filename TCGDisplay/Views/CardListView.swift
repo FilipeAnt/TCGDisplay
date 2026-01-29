@@ -28,8 +28,8 @@ struct CardListView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Pokémon Cards")
             .searchable(text: $viewModel.searchText, prompt: "Search by name")
+            .navigationTitle("Pokémon Cards")
             .task {
                 await viewModel.fetchCards()
             }
