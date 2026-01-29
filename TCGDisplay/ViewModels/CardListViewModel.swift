@@ -17,7 +17,7 @@ final class CardListViewModel: ObservableObject {
         }
     }
 
-    private var allCards: [PokemonCard] = []
+    var allCards: [PokemonCard] = []
 
     func fetchCards() async {
         do {
@@ -29,7 +29,7 @@ final class CardListViewModel: ObservableObject {
         }
     }
     
-    private func filterCards() {
+    func filterCards() {
         let trimmedSearch = searchText
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .lowercased()
