@@ -10,6 +10,8 @@ import SwiftUI
 struct InfoBoxView<Content: View>: View {
     let title: String?
     let width: CGFloat
+    private let stackSpacing: CGFloat = 8
+    private let cornerRadius: CGFloat = 12
 
     @ViewBuilder let content: () -> Content
 
@@ -21,7 +23,7 @@ struct InfoBoxView<Content: View>: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: stackSpacing) {
             if let title {
                 Text(title)
                     .font(.headline)
@@ -34,7 +36,7 @@ struct InfoBoxView<Content: View>: View {
         .padding()
         .frame(width: width)
         .background(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: cornerRadius)
                 .fill(Color(.secondarySystemBackground))
         )
     }

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct CardListView: View {
+    
+    private let gridSpacing: CGFloat = 16
     @StateObject private var viewModel = CardListViewModel()
 
     let columns = [
@@ -18,7 +20,7 @@ struct CardListView: View {
     var body: some View {
         NavigationView {
             ScrollView {
-                LazyVGrid(columns: columns, spacing: 16) {
+                LazyVGrid(columns: columns, spacing: gridSpacing) {
                     ForEach(viewModel.cards, id: \.id) { card in
                         NavigationLink(destination: CardDetailView(cardId: card.id)) {
                             CardRowView(card: card)

@@ -8,12 +8,18 @@
 import SwiftUI
 
 struct CardRowView: View {
+    
     let card: PokemonCard
     @State private var reloadImage = false
     @State private var retryCount = 0
 
     private let maxRetries = 3
     private let retryDelay: TimeInterval = 1.0
+    private let imageHeight: CGFloat = 230
+    private let imageCornerRadius: CGFloat = 8
+    private let cornerRadius: CGFloat = 10
+    private let padding: CGFloat = 10
+    private let shadowRadius: CGFloat = 2
 
     var body: some View {
         LazyVStack {
@@ -22,17 +28,17 @@ struct CardRowView: View {
                     switch phase {
                     case .empty:
                         ProgressView()
-                            .frame(height: 230)
+                            .frame(height: imageHeight)
                     case .success(let image):
                         image
                             .resizable()
                             .scaledToFit()
-                            .frame(height: 230)
-                            .cornerRadius(8)
+                            .frame(height: imageHeight)
+                            .cornerRadius(imageCornerRadius)
                     case .failure:
                         if retryCount < maxRetries {
                             ProgressView()
-                                .frame(height: 230)
+                                .frame(height: imageHeight)
                                 .onAppear {
                                     attemptRetry()
                                 }
@@ -40,8 +46,8 @@ struct CardRowView: View {
                             Image("backImgTest")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 230)
-                                .cornerRadius(8)
+                                .frame(height: imageHeight)
+                                .cornerRadius(imageCornerRadius)
                         }
                     @unknown default:
                         EmptyView()
@@ -52,7 +58,7 @@ struct CardRowView: View {
                 Image("backImgTest")
                     .resizable()
                     .scaledToFit()
-                    .frame(height: 230)
+                    .frame(height: imageHeight)
                     .foregroundColor(.gray)
             }
 
@@ -62,10 +68,10 @@ struct CardRowView: View {
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity, minHeight: 40) */
         }
-        .padding(10)
+        .padding(padding)
         .background(Color(.secondarySystemBackground))
-        .cornerRadius(10)
-        .shadow(radius: 2)
+        .cornerRadius(cornerRadius)
+        .shadow(radius: shadowRadius)
     }
 
     private func attemptRetry() {

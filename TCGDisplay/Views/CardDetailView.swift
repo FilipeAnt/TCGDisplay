@@ -10,11 +10,13 @@ import SwiftUI
 struct CardDetailView: View {
     
     let cardId: String
+    private let padding: CGFloat = 20
+    private let iconWidth: CGFloat = 20
+    private let iconHeight: CGFloat = 20
     @StateObject private var viewModel = CardDetailViewModel()
     
     var body: some View {
         ZStack {
-            // Gradient background
             LinearGradient(
                 colors: [.black, .gray],
                 startPoint: .topLeading,
@@ -48,35 +50,32 @@ struct CardDetailView: View {
                             }
                             
                             HStack(spacing: 4) {
-
-                                // Name
                                 Text(card.name)
                                     .font(.headline)
                                     .multilineTextAlignment(.center)
                                     .lineLimit(2)
                                     .frame(maxWidth: .infinity)
-
-                                // HP + Types row
+                                
                                 HStack(spacing: 6) {
                                     if let hp = card.hp {
                                         Text("HP \(hp)")
                                             .font(.subheadline)
                                             .foregroundColor(.secondary)
                                     }
-
+                                    
                                     if let types = card.types {
                                         ForEach(types, id: \.self) { type in
                                             Image(PokemonTypeIcon.assetName(for: type))
                                                 .resizable()
                                                 .scaledToFit()
-                                                .frame(width: 20, height: 20)
+                                                .frame(width: iconWidth, height: iconHeight)
                                         }
                                     }
                                 }
                             }
                             .frame(minHeight: 40)
-
-                            InfoBoxView(width: geo.size.width - 20) {
+                            
+                            InfoBoxView(width: geo.size.width - padding) {
                                 
                                 if let hp = card.hp {
                                     Text("HP: \(hp)")
@@ -94,10 +93,9 @@ struct CardDetailView: View {
                                     Text("Evolves from: \(evolveFrom)")
                                 }
                             }
-                            
                             // Attacks
                             if let attacks = card.attacks, !attacks.isEmpty {
-                                InfoBoxView(width: geo.size.width - 20, title: "Attacks") {
+                                InfoBoxView(width: geo.size.width - padding, title: "Attacks") {
                                     ForEach(attacks.indices, id: \.self) { i in
                                         let attack = attacks[i]
                                         
@@ -121,7 +119,6 @@ struct CardDetailView: View {
                                                     .foregroundStyle(.secondary)
                                             }
                                         }
-                                        
                                         if i != attacks.indices.last {
                                             Divider()
                                         }
