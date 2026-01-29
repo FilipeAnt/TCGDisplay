@@ -31,6 +31,13 @@ struct CardListView: View {
                 .padding()
             }
             .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer, prompt: "Search by name")
+            .background(
+                      LinearGradient(
+                        colors: [.black, .white, .black],
+                          startPoint: .top,
+                          endPoint: .bottom
+                      )
+                      .ignoresSafeArea())
             .navigationTitle("Pokémon Cards")
             //.navigationBarTitleDisplayMode(.inline)
             .task {

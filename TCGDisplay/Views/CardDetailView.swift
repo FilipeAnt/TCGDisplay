@@ -18,7 +18,7 @@ struct CardDetailView: View {
     var body: some View {
         ZStack {
             LinearGradient(
-                colors: [.black, .gray],
+                colors: [.black, .gray, .black],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
@@ -48,33 +48,7 @@ struct CardDetailView: View {
                                     }
                                 }
                             }
-                            
-                            HStack(spacing: 4) {
-                                Text(card.name)
-                                    .font(.headline)
-                                    .multilineTextAlignment(.center)
-                                    .lineLimit(2)
-                                    .frame(maxWidth: .infinity)
-                                
-                                HStack(spacing: 6) {
-                                    if let hp = card.hp {
-                                        Text("HP \(hp)")
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                    }
-                                    
-                                    if let types = card.types {
-                                        ForEach(types, id: \.self) { type in
-                                            Image(PokemonTypeIcon.assetName(for: type))
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: iconWidth, height: iconHeight)
-                                        }
-                                    }
-                                }
-                            }
-                            .frame(minHeight: 40)
-                            
+                                                        
                             InfoBoxView(width: geo.size.width - padding) {
                                 
                                 if let hp = card.hp {
@@ -82,7 +56,17 @@ struct CardDetailView: View {
                                 }
                                 
                                 if let types = card.types {
-                                    Text("Type: \(types.joined(separator: ", "))")
+                                    HStack(spacing: 6) {
+                                        Text("Type: \(types.joined(separator: ", "))")
+                                        if let types = card.types {
+                                            ForEach(types, id: \.self) { type in
+                                                Image(PokemonTypeIcon.assetName(for: type))
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: iconWidth, height: iconHeight)
+                                            }
+                                        }
+                                    }
                                 }
                                 
                                 if let rarity = card.rarity {
