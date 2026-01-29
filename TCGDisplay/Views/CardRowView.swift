@@ -61,6 +61,19 @@ struct CardRowView: View {
                     .frame(height: imageHeight)
                     .foregroundColor(.gray)
             }
+            Text(card.name)
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [.yellow, .orange],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                .shadow(color: .black.opacity(0.5), radius: 2, x: 1, y: 1)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .frame(maxWidth: .infinity)
         }
         .padding(padding)
         .background(Color(.secondarySystemBackground))
