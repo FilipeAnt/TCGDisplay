@@ -134,20 +134,20 @@ struct CardDetailView: View {
                                 case .prices:
                                     InfoBoxView(width: geo.size.width - padding) {
                                         if let market = card.pricing?.cardmarket {
-                                            
                                             VStack(alignment: .leading, spacing: 8) {
-                                                VStack(alignment: .leading, spacing: 4) {
-                                                    Text("Normal").bold()
-                                                    HStack { Text("Low:").foregroundColor(.green); Spacer(); Text("$\(market.low ?? 0, specifier: "%.2f")") }
-                                                    HStack { Text("Avg:").foregroundColor(.blue); Spacer(); Text("$\(market.avg ?? 0, specifier: "%.2f")") }
-                                                    HStack { Text("Trend:").foregroundColor(.red); Spacer(); Text("$\(market.trend ?? 0, specifier: "%.2f")") }
-                                                }
-                                                VStack(alignment: .leading, spacing: 4) {
-                                                    Text("Reverse Holo").bold()
-                                                    HStack { Text("Low:").foregroundColor(.green); Spacer(); Text("$\(market.lowHolo ?? 0, specifier: "%.2f")") }
-                                                    HStack { Text("Avg:").foregroundColor(.blue); Spacer(); Text("$\(market.avgHolo ?? 0, specifier: "%.2f")") }
-                                                    HStack { Text("Trend:").foregroundColor(.red); Spacer(); Text("$\(market.trendHolo ?? 0, specifier: "%.2f")") }
-                                                }
+                                                priceSection(
+                                                    title: "Normal",
+                                                    low: market.low,
+                                                    avg: market.avg,
+                                                    trend: market.trend
+                                                )
+                                                
+                                                priceSection(
+                                                    title: "Reverse Holo",
+                                                    low: market.lowHolo,
+                                                    avg: market.avgHolo,
+                                                    trend: market.trendHolo
+                                                )
                                             }
                                             .padding(.bottom, 8)
                                         }
@@ -177,4 +177,25 @@ struct CardDetailView: View {
             }
         }
     }
+    
+    @ViewBuilder
+    private func priceRow(label: String, value: Double?, color: Color) -> some View {
+        HStack {
+            Text(label)
+                .foregroundColor(color)
+            Spacer()
+            Text("$\(value ?? 0, specifier: "%.2f")")
+        }
+    }
+    
+    @ViewBuilder
+    private func priceSection(title: String, low: Double?, avg: Double?, trend: Double?) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title).bold()
+            priceRow(label: "Low:", value: low, color: .green)
+            priceRow(label: "Avg:", value: avg, color: .blue)
+            priceRow(label: "Trend:", value: trend, color: .red)
+        }
+    }
+    
 }
