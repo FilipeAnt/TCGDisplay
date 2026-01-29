@@ -30,14 +30,19 @@ struct CardRowView: View {
                             .frame(height: 200)
                             .cornerRadius(8)
                     case .failure:
-                        Image("backImgTest")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 200)
-                            .foregroundColor(.clear)
-                            .onAppear {
-                                attemptRetry()
-                            }
+                        if retryCount < maxRetries {
+                            ProgressView()
+                                .frame(height: 200)
+                                .onAppear {
+                                    attemptRetry()
+                                }
+                        } else {
+                            Image("backImgTest")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 200)
+                                .cornerRadius(8)
+                        }
                     @unknown default:
                         EmptyView()
                     }
@@ -50,11 +55,12 @@ struct CardRowView: View {
                     .frame(height: 200)
                     .foregroundColor(.gray)
             }
+
             Text(card.name)
                 .font(.headline)
-                .multilineTextAlignment(.center)
                 .lineLimit(2)
-                .frame(maxWidth: .infinity)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity, minHeight: 40)
         }
         .padding(10)
         .background(Color(.secondarySystemBackground))
@@ -63,9 +69,7 @@ struct CardRowView: View {
     }
 
     private func attemptRetry() {
-        guard retryCount < maxRetries else { return }
         retryCount += 1
-
         DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
             reloadImage.toggle()
         }
