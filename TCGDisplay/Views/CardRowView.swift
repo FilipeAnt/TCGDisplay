@@ -61,12 +61,6 @@ struct CardRowView: View {
                     .frame(height: imageHeight)
                     .foregroundColor(.gray)
             }
-
-          /*  Text(card.name)
-                .font(.headline)
-                .lineLimit(2)
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity, minHeight: 40) */
         }
         .padding(padding)
         .background(Color(.secondarySystemBackground))

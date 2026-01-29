@@ -10,7 +10,7 @@ import Foundation
 struct PokemonCard: Identifiable, Decodable {
     let id: String
     let name: String
-    let image: String? // optional URL string
+    let image: String?
     let hp: Int?
     let types: [String]?
 }

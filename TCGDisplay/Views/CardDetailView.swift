@@ -73,7 +73,6 @@ struct CardDetailView: View {
                                 switch selectedTab {
                                 case .details:
                                     VStack(spacing: 10) {
-                                        // Info Box: HP, Type, Rarity, Evolves from
                                         InfoBoxView(width: geo.size.width - padding) {
                                             if let hp = card.hp {
                                                 Text("HP: \(hp)")
@@ -100,7 +99,6 @@ struct CardDetailView: View {
                                             }
                                         }
                                         
-                                        // Info Box: Attacks
                                         if let attacks = card.attacks, !attacks.isEmpty {
                                             InfoBoxView(width: geo.size.width - padding, title: "Attacks") {
                                                 ForEach(attacks.indices, id: \.self) { i in
@@ -135,18 +133,15 @@ struct CardDetailView: View {
                                     
                                 case .prices:
                                     InfoBoxView(width: geo.size.width - padding) {
-                                        // MARK: - CardMarket Pricing
                                         if let market = card.pricing?.cardmarket {
+                                            
                                             VStack(alignment: .leading, spacing: 8) {
-                                                // Normal
                                                 VStack(alignment: .leading, spacing: 4) {
                                                     Text("Normal").bold()
                                                     HStack { Text("Low:").foregroundColor(.green); Spacer(); Text("$\(market.low ?? 0, specifier: "%.2f")") }
                                                     HStack { Text("Avg:").foregroundColor(.blue); Spacer(); Text("$\(market.avg ?? 0, specifier: "%.2f")") }
                                                     HStack { Text("Trend:").foregroundColor(.red); Spacer(); Text("$\(market.trend ?? 0, specifier: "%.2f")") }
                                                 }
-                                                
-                                                // Reverse Holo
                                                 VStack(alignment: .leading, spacing: 4) {
                                                     Text("Reverse Holo").bold()
                                                     HStack { Text("Low:").foregroundColor(.green); Spacer(); Text("$\(market.lowHolo ?? 0, specifier: "%.2f")") }

@@ -39,7 +39,6 @@ struct CardListView: View {
                       )
                       .ignoresSafeArea())
             .navigationTitle("Pokémon Cards")
-            //.navigationBarTitleDisplayMode(.inline)
             .task {
                 await viewModel.fetchCards()
             }
