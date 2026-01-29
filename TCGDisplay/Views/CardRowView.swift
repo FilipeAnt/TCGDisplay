@@ -16,23 +16,23 @@ struct CardRowView: View {
     private let retryDelay: TimeInterval = 1.0
 
     var body: some View {
-        VStack {
+        LazyVStack {
             if let imageUrl = card.image, let url = URL(string: "\(imageUrl)/high.webp") {
                 AsyncImage(url: url, transaction: Transaction(animation: .easeIn)) { phase in
                     switch phase {
                     case .empty:
                         ProgressView()
-                            .frame(height: 200)
+                            .frame(height: 230)
                     case .success(let image):
                         image
                             .resizable()
                             .scaledToFit()
-                            .frame(height: 200)
+                            .frame(height: 230)
                             .cornerRadius(8)
                     case .failure:
                         if retryCount < maxRetries {
                             ProgressView()
-                                .frame(height: 200)
+                                .frame(height: 230)
                                 .onAppear {
                                     attemptRetry()
                                 }
@@ -40,7 +40,7 @@ struct CardRowView: View {
                             Image("backImgTest")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 200)
+                                .frame(height: 230)
                                 .cornerRadius(8)
                         }
                     @unknown default:
@@ -52,15 +52,15 @@ struct CardRowView: View {
                 Image("backImgTest")
                     .resizable()
                     .scaledToFit()
-                    .frame(height: 200)
+                    .frame(height: 230)
                     .foregroundColor(.gray)
             }
 
-            Text(card.name)
+          /*  Text(card.name)
                 .font(.headline)
                 .lineLimit(2)
                 .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity, minHeight: 40)
+                .frame(maxWidth: .infinity, minHeight: 40) */
         }
         .padding(10)
         .background(Color(.secondarySystemBackground))

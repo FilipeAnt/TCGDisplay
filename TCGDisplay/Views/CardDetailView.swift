@@ -21,100 +21,103 @@ struct CardDetailView: View {
                 endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
-            ScrollView {
-                if viewModel.isLoading {
-                    ProgressView("Loading...")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if let card = viewModel.card {
-                    VStack(alignment: .center, spacing: 16) {
-                        if let imageUrl = card.image, let url = URL(string: "\(imageUrl)/high.webp") {
-                            AsyncImage(url: url) { phase in
-                                switch phase {
-                                case .empty:
-                                    ProgressView()
-                                case .success(let image):
-                                    image
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(maxWidth: 300)
-                                        .cornerRadius(12)
-                                case .failure:
-                                    Image(systemName: "photo")
-                                @unknown default:
-                                    EmptyView()
-                                }
-                            }
-                        }
-                        
-                        Text(card.name)
-                            .font(.title)
-                            .bold()
-                        
-                        InfoBoxView {
-                            if let hp = card.hp {
-                                Text("HP: \(hp)")
-                            }
-                            
-                            if let types = card.types {
-                                Text("Type: \(types.joined(separator: ", "))")
-                            }
-                            
-                            if let rarity = card.rarity {
-                                Text("Rarity: \(rarity)")
-                            }
-                            
-                            if let evolveFrom = card.evolveFrom {
-                                Text("Evolves from: \(evolveFrom)")
-                            }
-                        }
-                        
-                        // Attacks
-                        if let attacks = card.attacks, !attacks.isEmpty {
-                            InfoBoxView(title: "Attacks") {
-                                ForEach(attacks.indices, id: \.self) { i in
-                                    let attack = attacks[i]
-                                    
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(attack.name ?? "Unknown")
-                                            .bold()
-                                        
-                                        if let cost = attack.cost {
-                                            Text("Cost: \(cost.joined(separator: ", "))")
-                                                .font(.subheadline)
-                                                .foregroundStyle(.secondary)
-                                        }
-                                        
-                                        if let damage = attack.damage {
-                                            Text("Damage: \(damage)")
-                                        }
-                                        
-                                        if let effect = attack.effect {
-                                            Text(effect)
-                                                .font(.footnote)
-                                                .foregroundStyle(.secondary)
-                                        }
-                                    }
-                                    
-                                    if i != attacks.indices.last {
-                                        Divider()
+            GeometryReader { geo in
+                ScrollView {
+                    if viewModel.isLoading {
+                        ProgressView("Loading...")
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else if let card = viewModel.card {
+                        VStack(alignment: .center, spacing: 16) {
+                            if let imageUrl = card.image, let url = URL(string: "\(imageUrl)/high.webp") {
+                                AsyncImage(url: url) { phase in
+                                    switch phase {
+                                    case .empty:
+                                        ProgressView()
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(maxWidth: 300)
+                                            .cornerRadius(12)
+                                    case .failure:
+                                        Image(systemName: "photo")
+                                    @unknown default:
+                                        EmptyView()
                                     }
                                 }
                             }
+                            
+                            Text(card.name)
+                                .font(.title)
+                                .bold()
+                            
+                            InfoBoxView(width: geo.size.width - 20) {
+                                
+                                if let hp = card.hp {
+                                    Text("HP: \(hp)")
+                                }
+                                
+                                if let types = card.types {
+                                    Text("Type: \(types.joined(separator: ", "))")
+                                }
+                                
+                                if let rarity = card.rarity {
+                                    Text("Rarity: \(rarity)")
+                                }
+                                
+                                if let evolveFrom = card.evolveFrom {
+                                    Text("Evolves from: \(evolveFrom)")
+                                }
+                            }
+                            
+                            // Attacks
+                            if let attacks = card.attacks, !attacks.isEmpty {
+                                InfoBoxView(width: geo.size.width - 20, title: "Attacks") {
+                                    ForEach(attacks.indices, id: \.self) { i in
+                                        let attack = attacks[i]
+                                        
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text(attack.name ?? "Unknown")
+                                                .bold()
+                                            
+                                            if let cost = attack.cost {
+                                                Text("Cost: \(cost.joined(separator: ", "))")
+                                                    .font(.subheadline)
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                            
+                                            if let damage = attack.damage {
+                                                Text("Damage: \(damage)")
+                                            }
+                                            
+                                            if let effect = attack.effect {
+                                                Text(effect)
+                                                    .font(.footnote)
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                        }
+                                        
+                                        if i != attacks.indices.last {
+                                            Divider()
+                                        }
+                                    }
+                                }
+                            }
+                            Spacer()
                         }
-                        Spacer()
+                        .padding()
+                    } else if let error = viewModel.errorMessage {
+                        Text(error)
+                            .foregroundColor(.red)
+                            .padding()
+                    } else {
+                        Text("No card data available")
+                            .padding()
                     }
-                    .padding()
-                } else if let error = viewModel.errorMessage {
-                    Text(error)
-                        .foregroundColor(.red)
-                        .padding()
-                } else {
-                    Text("No card data available")
-                        .padding()
                 }
-            }
-            .onAppear {
-                Task { await viewModel.fetchCardDetail(id: cardId) }
+                .onAppear {
+                    Task { await viewModel.fetchCardDetail(id: cardId) }
+                }
             }
         }
     }

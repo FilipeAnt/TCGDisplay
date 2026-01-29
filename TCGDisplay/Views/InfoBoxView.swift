@@ -9,12 +9,15 @@ import SwiftUI
 
 struct InfoBoxView<Content: View>: View {
     let title: String?
+    let width: CGFloat
+
     @ViewBuilder let content: () -> Content
 
-    init(title: String? = nil,
+    init(width: CGFloat,title: String? = nil,
          @ViewBuilder content: @escaping () -> Content) {
         self.title = title
         self.content = content
+        self.width = width
     }
 
     var body: some View {
@@ -22,11 +25,14 @@ struct InfoBoxView<Content: View>: View {
             if let title {
                 Text(title)
                     .font(.headline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
 
             content()
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding()
+        .frame(width: width)
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color(.secondarySystemBackground))

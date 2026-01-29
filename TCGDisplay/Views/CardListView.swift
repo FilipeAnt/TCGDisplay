@@ -28,8 +28,9 @@ struct CardListView: View {
                 }
                 .padding()
             }
-            .searchable(text: $viewModel.searchText, prompt: "Search by name")
+            .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer, prompt: "Search by name")
             .navigationTitle("Pokémon Cards")
+            //.navigationBarTitleDisplayMode(.inline)
             .task {
                 await viewModel.fetchCards()
             }
