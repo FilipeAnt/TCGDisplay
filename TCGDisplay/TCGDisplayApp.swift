@@ -10,24 +10,11 @@ import SwiftUI
 @main
 struct TCGDisplayApp: App {
     var body: some Scene {
-          WindowGroup {
-              TabView {
-                  NavigationStack {
-                      CardListView()
-                  }
-                  .tabItem {
-                      Label("Cards", systemImage: "rectangle.grid.2x2")
-                  }
-
-                  NavigationStack {
-                      //FavoritesView()
-                  }
-                  .tabItem {
-                      Label("Favorites", systemImage: "heart")
-                  }
-                  .tabViewStyle(.sidebarAdaptable)
-              }
-              .preferredColorScheme(.dark)
-          }
-      }
+        WindowGroup {
+            NavigationStack {
+                CardListView()
+            }
+            .preferredColorScheme(.dark)
+        }
+    }
 }
